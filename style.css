@@ -1,0 +1,226 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+:root {
+    --light: #F0F0F0;
+    --gray: #525252;
+    --light-gray: #7A7A7A;
+    --secondary-color: #201E1F;
+    --primary-color: #131212;
+    --blue: #59C1DE;
+    --red: #C0433F;
+}
+
+h1 { color: var(--light); }
+h3 { color: var(--light); }
+h4 { color: var(--light); }
+h6 { color: var(--light-gray); font-size: 0.9rem;}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    font-family: 'Poppins', sans-serif;
+}
+
+header {
+    display: flex;
+    justify-content: center;
+    background-color: var(--primary-color);
+    color: var(--light);
+    font-size: 0.7rem;
+}
+
+#search {
+    background-image: url('./img/champion/splash/Kaisa_0.jpg');
+    background-size: 100%;
+    height: 25vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#search-player-input {
+    font-family: 'Poppins', sans-serif;
+    padding: 9px 25px;
+    border-radius: 1.2rem;
+    border: none;
+}
+
+#player-info {
+    background-color: var(--primary-color);
+}
+
+.player-info-container {
+    padding: 20px;
+    margin: 0 20px;
+    bottom: 50px;
+}
+
+#player-summoner-icon {
+    height: 80px;
+    width: 80px;
+    border-radius: 100%;
+}
+
+.player-profile {
+    display: flex;
+    align-items: center;
+}
+
+#player-username {
+    margin-left: 20px;
+}
+
+.player-ranked-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.player-ranked-card img {
+    width: 80px;
+}
+
+.recent-champ-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.match-history-container {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.recent-champ {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.recent-champ img {
+    width: 80%;
+    border-radius: 100%;
+}
+
+.recent-champ span {
+    margin-left: 3px;
+    color: var(--light-gray);
+}
+
+
+.player-match-history h3 {
+    color: var(--light-gray);
+}
+
+.match-history-card {
+    background-color: var(--secondary-color);
+    border-radius: 10px;
+}
+
+.match-history-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.match-dateinfo {
+    display: flex;
+}
+
+.match-type {
+    color: var(--light);
+}
+
+.match-date {
+    color: var(--gray);
+}
+
+.match-duration {
+    margin-left: 10px;
+    color: var(--gray);
+}
+
+a { text-decoration: none; }
+
+.match-issue {
+    display: block;
+    margin-top: 10px;
+    text-transform: uppercase;
+    color: var(--primary-color);
+    padding: 5px 25px;
+    border-radius: 2rem;
+    background-color: var(--blue);
+}
+
+.match-history-card-main {
+    display: flex;
+    justify-content: space-between;
+}
+
+.match-history-champ {
+    max-width: 100%;
+}
+
+.match-history-champ-infos {
+    display: flex;
+    align-items: center;
+    position: relative;
+    bottom: 100px;
+    margin-left: 10px;
+}
+
+.match-history-level {
+    color: var(--light);
+    padding: 2px 5px;
+    border-radius: 100%;
+    background-color: var(--gray);
+}
+
+.match-history-champ-name {
+    color: var(--light);
+    font-size: 1.5rem;
+    margin-left: 10px;
+}
+
+.match-history-card-main-right-col {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.match-history-items {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.match-item {
+    width: 35px;
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
+.match-history-summoners {
+    margin-top: 5px;
+}
+
+.match-history-summoners img {
+    width: 20px;
+}
+
+.match-history-card-footer {
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--gray);
+}
+
+.footer-card {
+    display: flex;
+}
+
+.footer-card h5 {
+    margin-left: 10px;
+}
+
+.footer-card-img {
+    width: 30px;
+}
