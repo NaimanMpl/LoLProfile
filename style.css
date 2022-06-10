@@ -114,6 +114,7 @@ header {
 }
 
 .match-history-card {
+    margin-top: 20px;
     background-color: var(--secondary-color);
     border-radius: 10px;
     overflow: hidden;
@@ -163,11 +164,7 @@ a { text-decoration: none; }
     justify-content: space-between;
 }
 
-.match-history-champ {
-}
-
 .match-history-champ-img {
-    background: url('./img/champion/splash/Zeri_0.jpg');
     background-size: cover;
     width: 50vw;
     height: 15vh;

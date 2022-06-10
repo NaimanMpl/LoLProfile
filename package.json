@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@fightmegg/riot-api": "^0.0.8"
+    "@fightmegg/riot-api": "^0.0.8",
+    "@types/node": "^17.0.41"
   }
 }
