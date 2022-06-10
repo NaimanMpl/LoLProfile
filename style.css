@@ -3,6 +3,7 @@
 :root {
     --light: #F0F0F0;
     --gray: #525252;
+    --gray-2: #292727;
     --light-gray: #7A7A7A;
     --secondary-color: #201E1F;
     --primary-color: #131212;
@@ -115,17 +116,21 @@ header {
 .match-history-card {
     background-color: var(--secondary-color);
     border-radius: 10px;
+    overflow: hidden;
 }
 
 .match-history-card-header {
     display: flex;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
+    margin: 0 20px;
 }
+
 
 .match-dateinfo {
     display: flex;
 }
+
 
 .match-type {
     color: var(--light);
@@ -153,19 +158,26 @@ a { text-decoration: none; }
 }
 
 .match-history-card-main {
+    margin-top: 10px;
     display: flex;
     justify-content: space-between;
 }
 
 .match-history-champ {
-    max-width: 100%;
+}
+
+.match-history-champ-img {
+    background: url('./img/champion/splash/Zeri_0.jpg');
+    background-size: cover;
+    width: 50vw;
+    height: 15vh;
 }
 
 .match-history-champ-infos {
     display: flex;
     align-items: center;
-    position: relative;
-    bottom: 100px;
+    position: absolute;
+    margin-top: 50px;
     margin-left: 10px;
 }
 
@@ -191,12 +203,11 @@ a { text-decoration: none; }
 .match-history-items {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 5px;
 }
 
 .match-item {
     width: 35px;
-    margin-left: 10px;
-    margin-top: 10px;
 }
 
 .match-history-summoners {
@@ -210,15 +221,17 @@ a { text-decoration: none; }
 .match-history-card-footer {
     display: flex;
     justify-content: space-between;
-    background-color: var(--gray);
+    background-color: var(--gray-2);
 }
 
 .footer-card {
     display: flex;
+    margin: 0 20px;
 }
 
 .footer-card h5 {
     margin-left: 10px;
+    color: var(--light);
 }
 
 .footer-card-img {
