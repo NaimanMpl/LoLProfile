@@ -15,6 +15,3 @@ rAPI.summoner.getBySummonerName({
     region: PlatformId.EUW1,
     summonerName: 'ZelphiiX'
 }).then(summoner => {console.log(summoner)});
-
-
-
