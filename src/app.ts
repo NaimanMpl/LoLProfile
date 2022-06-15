@@ -7,7 +7,7 @@ const summonerSoloRank = document.getElementById('player-soloduo-rank') as HTMLT
 const summonerSoloImg = document.getElementById('player-soloduo-rank-icon') as HTMLImageElement;
 
 const recentChampsContainer = document.querySelector('.recent-champ-container') as HTMLDivElement;
-// const matchHistoryContainer = document.querySelector('.match-history-card-container') as HTMLDivElement;
+const matchHistoryContainer = document.querySelector('.match-history-card-container') as HTMLDivElement;
 
 // Default Summoner
 
@@ -141,7 +141,7 @@ function createRecentChampCard(championName:string, championRate: number) {
     recentChampsContainer.append(recentChampDiv);
 }
 
-async function createMatchHistoryCard(match: any) {
+async function createMatchHistoryCard(match: any, puuid: string) {
     const matchHistoryCard = document.createElement('div');
     matchHistoryCard.className = 'match-history-card';
 
@@ -150,6 +150,7 @@ async function createMatchHistoryCard(match: any) {
     
     const headerLeftCol = document.createElement('div');
     headerLeftCol.className = 'match-history-card-header-left-col';
+    
     const matchType = document.createElement('div');
     matchType.className = 'match-type';
 
@@ -163,16 +164,58 @@ async function createMatchHistoryCard(match: any) {
             },
         }
     );
+
     const queueData = await queueResponse.json();
     
     for (let queue of queueData) {
         if (queue.queueId === match.info.queueId) {
-            console.log(queue.map, queue.description);
+            matchType.textContent = `${queue.map} - ${queue.description}`;
             break;
         }
     }
 
-    
+    const matchDateInfo = document.createElement('div');
+    matchDateInfo.className = 'match-dateinfo';
+
+    const startTimestamp = match.info.gameStartTimestamp;
+
+    const matchDate = document.createElement('a');
+    matchDate.className = 'match-date';
+
+    const matchDuration = document.createElement('a');
+    matchDuration.className = 'match-duration';
+
+    const startDate = new Date(startTimestamp);
+
+    if (startDate.getHours() < 10) matchDate.textContent = '0';
+    matchDate.textContent += startDate.getHours().toString() + ':' + (startDate.getMinutes() < 10 ? '0' + startDate.getMinutes().toString() : startDate.getMinutes().toString());
+
+    matchDuration.textContent = 'En Dévelopement !';
+
+    matchDateInfo.append(matchDate);
+    matchDateInfo.append(matchDuration);
+
+    headerLeftCol.append(matchType);
+    headerLeftCol.append(matchDateInfo);
+
+    const headerRightCol = document.createElement('div');
+    headerRightCol.className = 'match-history-card-header-right-col';
+
+    const matchIssue = document.createElement('a');
+    matchIssue.className = 'match-issue';
+    const j = match.metadata.participants.indexOf(puuid);
+    const win = match.info.participants[j].win;
+    matchIssue.textContent = win ? 'Victoire' : 'Défaite';
+    if (!win) matchIssue.style.backgroundColor = '#C0433F';
+
+    headerRightCol.append(matchIssue);
+
+    header.append(headerLeftCol);
+    header.append(headerRightCol);
+
+    matchHistoryCard.append(header);
+    matchHistoryContainer.append(matchHistoryCard);
+
 }
 
 async function updateMatchHistory(puuid: string) {
@@ -218,16 +261,17 @@ async function updateMatchHistory(puuid: string) {
     recentChampsRate.sort((a, b) => (a.championRate < b.championRate ? 1 : -1));
 
     // In Case where 'recentChampRates' contains only 1 or 2 champs (Summoner OTP 1 or 2 champs)
-    let n = recentChampsRate.length < 3 ? recentChamps.length : 3;
+    let n = recentChampsRate.length < 3 ? recentChampsRate.length : 3;
 
     for (let i = 0; i < n; i++) {
         let champ = recentChampsRate[i];
+        console.log(champ);
         createRecentChampCard(champ.championName, champ.championRate);
     }
 
     // Updating Match History Cards
     for (let match of matchHistory) {
-        createMatchHistoryCard(match);
+        createMatchHistoryCard(match, puuid);
     }
 }
 
