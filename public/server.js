@@ -96,5 +96,51 @@ app.post('/summonerMatchHistory', async (request, response) => {
         console.log(e);
     }
 });
+app.post('/champSquareImg', async (request, response) => {
+    try {
+        const ddragon = new riot_api_1.DDragon();
+        const version = await ddragon.versions.latest();
+        const championName = request.body.championName;
+        const champSquareUrl = `http://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${championName}.png`;
+        const champSquareImg = await axios_1.default.get(champSquareUrl);
+        response.json(champSquareImg.config);
+    }
+    catch (e) {
+        console.log(e);
+    }
+});
+app.post('/championSplash', async (request, response) => {
+    try {
+        const championName = request.body.championName;
+        const championSplashUrl = `http://ddragon.leagueoflegends.com/cdn/img/champion/splash/${championName}_0.jpg`;
+        const championSplash = await axios_1.default.get(championSplashUrl);
+        response.json(championSplash.config);
+    }
+    catch (e) {
+        console.log(e);
+    }
+});
+app.post('/item', async (request, response) => {
+    try {
+        const ddragon = new riot_api_1.DDragon();
+        const version = await ddragon.versions.latest();
+        console.log('Here!', request.body);
+        const itemIdsArray = request.body.itemIds;
+        const itemPromises = [];
+        itemIdsArray.forEach(id => {
+            const itemUrl = `http://ddragon.leagueoflegends.com/cdn/${version}/img/item/${id}.png`;
+            itemPromises.push(axios_1.default.get(itemUrl));
+        });
+        const itemsImg = await Promise.all(itemPromises);
+        const itemData = [];
+        itemsImg.forEach(item => {
+            itemData.push(item.config.url);
+        });
+        response.json(itemData);
+    }
+    catch (e) {
+        console.log(e);
+    }
+});
 app.listen(3000, () => console.log('Server Started!'));
 //# sourceMappingURL=server.js.map

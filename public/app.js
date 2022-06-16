@@ -96,11 +96,20 @@ function checkDuplicate(champName, recentChampsRate) {
     }
     return false;
 }
-function createRecentChampCard(championName, championRate) {
+async function createRecentChampCard(championName, championRate) {
     const recentChampDiv = document.createElement('div');
     recentChampDiv.className = 'recent-champ';
     const recentChampImg = document.createElement('img');
-    recentChampImg.src = `http://ddragon.leagueoflegends.com/cdn/12.11.1/img/champion/${championName}.png`;
+    const response = await fetch('/champSquareImg', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({ championName: championName })
+    });
+    const champSquareImg = await response.json();
+    recentChampImg.src = champSquareImg.url;
     recentChampImg.alt = championName;
     const rateText = document.createElement('h3');
     rateText.textContent = (championRate * 100).toString();
@@ -145,7 +154,7 @@ async function createMatchHistoryCard(match, puuid) {
     if (startDate.getHours() < 10)
         matchDate.textContent = '0';
     matchDate.textContent += startDate.getHours().toString() + ':' + (startDate.getMinutes() < 10 ? '0' + startDate.getMinutes().toString() : startDate.getMinutes().toString());
-    matchDuration.textContent = 'En Dévelopement !';
+    matchDuration.textContent = 'In Dev !';
     matchDateInfo.append(matchDate);
     matchDateInfo.append(matchDuration);
     headerLeftCol.append(matchType);
@@ -163,6 +172,73 @@ async function createMatchHistoryCard(match, puuid) {
     header.append(headerLeftCol);
     header.append(headerRightCol);
     matchHistoryCard.append(header);
+    const mainContent = document.createElement('div');
+    mainContent.className = 'match-history-card-main';
+    const mainLeftCol = document.createElement('div');
+    mainLeftCol.className = 'match-history-card-main-left-col';
+    const champImg = document.createElement('div');
+    champImg.className = 'match-history-champ-img';
+    const splashResponse = await fetch('/championSplash', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({ championName: match.info.participants[j].championName })
+    });
+    const splashImg = await splashResponse.json();
+    champImg.style.background = `url(${splashImg.url})`;
+    champImg.style.backgroundSize = 'cover';
+    const matchInfos = document.createElement('div');
+    matchInfos.className = 'match-history-champ-infos';
+    const champLevelDiv = document.createElement('h5');
+    champLevelDiv.className = 'match-history-level';
+    champLevelDiv.textContent = match.info.participants[j].champLevel.toString();
+    const champNameDiv = document.createElement('h5');
+    champNameDiv.className = 'match-history-champ-name';
+    champNameDiv.textContent = match.info.participants[j].championName;
+    matchInfos.append(champLevelDiv);
+    matchInfos.append(champNameDiv);
+    champImg.append(matchInfos);
+    mainLeftCol.append(champImg);
+    const mainRightCol = document.createElement('div');
+    mainRightCol.className = 'match-history-card-main-right-col';
+    const itemsContainer = document.createElement('div');
+    itemsContainer.className = 'match-history-items';
+    const itemIdArray = [];
+    for (let i = 0; i < 6; i++) {
+        const itemId = match.info.participants[j][`item${i}`];
+        if (itemId !== 0)
+            itemIdArray.push(itemId);
+    }
+    console.log(itemIdArray);
+    const itemResponse = await fetch('/item', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({ itemIds: itemIdArray })
+    });
+    const itemData = await itemResponse.json();
+    for (let i = 0; i < 6; i++) {
+        const matchItem = document.createElement('img');
+        matchItem.className = 'match-item';
+        if (i < itemData.length) {
+            const itemUrl = itemData[i];
+            matchItem.src = itemUrl;
+        }
+        else {
+            matchItem.src = './img/items/default-item.svg';
+        }
+        itemsContainer.append(matchItem);
+    }
+    mainRightCol.append(itemsContainer);
+    mainContent.append(mainLeftCol);
+    mainContent.append(mainRightCol);
+    matchHistoryCard.append(mainContent);
+    const matchSummoners = document.createElement('div');
+    matchSummoners.className = 'match-history-summoners';
     matchHistoryContainer.append(matchHistoryCard);
 }
 async function updateMatchHistory(puuid) {
@@ -200,6 +276,8 @@ async function updateMatchHistory(puuid) {
         console.log(champ);
         createRecentChampCard(champ.championName, champ.championRate);
     }
+    while (matchHistoryContainer.firstChild)
+        matchHistoryContainer.removeChild(matchHistoryContainer.firstChild);
     for (let match of matchHistory) {
         createMatchHistoryCard(match, puuid);
     }

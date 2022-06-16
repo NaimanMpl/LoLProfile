@@ -1,6 +1,6 @@
 import express, { Application, Request, Response } from 'express';
 import { RiotAPI, PlatformId, DDragon, RiotAPITypes } from '@fightmegg/riot-api';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import queues from './assets/queues.json';
 import maps from './assets/maps.json';
 import gamemModes from './assets/gameModes.json';
@@ -104,6 +104,60 @@ app.post('/summonerMatchHistory', async (request: Request, response: Response) =
     } catch(e) {
         console.log(e);
     }
+});
+
+app.post('/champSquareImg', async (request: Request, response: Response) => {
+    try {
+        const ddragon = new DDragon();
+        const version: string = await ddragon.versions.latest();
+        const championName = request.body.championName;
+        const champSquareUrl = `http://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${championName}.png`;
+        const champSquareImg = await axios.get(champSquareUrl);
+    
+        response.json(champSquareImg.config);
+    } catch(e) {
+        console.log(e);
+    }
+
+});
+
+app.post('/championSplash', async (request: Request, response: Response) => {
+    try {
+        const championName = request.body.championName;
+        const championSplashUrl = `http://ddragon.leagueoflegends.com/cdn/img/champion/splash/${championName}_0.jpg`;
+        const championSplash = await axios.get(championSplashUrl);
+    
+        response.json(championSplash.config);
+    } catch(e) {
+        console.log(e);
+    }
+});
+
+app.post('/item', async (request: Request, response: Response) => {
+    try {
+        const ddragon = new DDragon();
+        const version = await ddragon.versions.latest();
+        console.log('Here!', request.body);
+        const itemIdsArray: number[] = request.body.itemIds;
+        const itemPromises: Promise<AxiosResponse<any, any>>[] = [];
+
+        itemIdsArray.forEach(id => {
+            const itemUrl = `http://ddragon.leagueoflegends.com/cdn/${version}/img/item/${id}.png`;
+            itemPromises.push(axios.get(itemUrl));
+        });
+
+        const itemsImg = await Promise.all(itemPromises);
+        const itemData: string[] = [];
+
+        itemsImg.forEach(item => {
+            itemData.push(item.config.url!);
+        });
+
+        response.json(itemData);
+    } catch(e) {
+        console.log(e);
+    }
+    
 });
 
 app.listen(3000, () => console.log('Server Started!'));
