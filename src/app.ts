@@ -80,7 +80,7 @@ async function updateRankedStats(summonerId: string) {
         'BRONZE' : 'Bronze',
         'SILVER': 'Argent',
         'GOLD' : 'Or',
-        'PLATINIUM' : 'Platine',
+        'PLATINUM' : 'Platine',
         'DIAMOND' : 'Diamant',
         'MASTER' : 'Maître',
         'GRANDMASTER' : 'Grand Maître',
@@ -310,17 +310,69 @@ async function createMatchHistoryCard(match: any, puuid: string) {
         itemsContainer.append(matchItem);
     }
 
+    const matchSummoners = document.createElement('div');
+    matchSummoners.className = 'match-history-summoners';
+
+    const summoner1 = document.createElement('img');
+    summoner1.src = './img/summoners/flash.webp'
+    const summoner2 = document.createElement('img');
+    summoner2.src = './img/summoners/heal.webp';
+
+    matchSummoners.append(summoner1);
+    matchSummoners.append(summoner2);
+
     mainRightCol.append(itemsContainer);
+    mainRightCol.append(matchSummoners);
 
     mainContent.append(mainLeftCol);
     mainContent.append(mainRightCol);
 
     matchHistoryCard.append(mainContent);
 
-    const matchSummoners = document.createElement('div');
-    matchSummoners.className = 'match-history-summoners';
+    const footer = document.createElement('div');
+    footer.className = 'match-history-card-footer';
 
+    const footerImgArray = [
+        {
+            img: './img/war-swords.svg',
+            class: 'match-player-kda',
+            text: `${match.info.participants[j].kills}/${match.info.participants[j].deaths}/${match.info.participants[j].assists}`
+        },
+        {
+            img: '',
+            class: 'match-player-cs',
+            text: `${match.info.participants[j].totalMinionsKilled} CS`
+        },
+        {
+            img: './img/coin.svg',
+            class: 'match-player-gold-earn',
+            text: `${match.info.participants[j].goldEarned}`
+        },
+        {
+            img: './img/arrow-right.svg'
+        }
+    ]
 
+    for (let card of footerImgArray) {
+        const footerCard = document.createElement('div');
+        footerCard.className = 'footer-card';
+
+        if (card.img) {
+            const cardImg = document.createElement('img');
+            cardImg.src = card.img;
+            cardImg.className = 'footer-card-img';
+            footerCard.append(cardImg);
+        }
+        if (card.class) {
+            const cardText = document.createElement('h5');
+            cardText.className = card.class
+            cardText.textContent = card.text
+            footerCard.append(cardText);
+        }
+        footer.append(footerCard);
+    }
+
+    matchHistoryCard.append(footer);
 
     matchHistoryContainer.append(matchHistoryCard);
 
