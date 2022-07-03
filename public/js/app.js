@@ -17,6 +17,10 @@ const summoner = {
     revisionDate: 1654958033000,
     summonerLevel: 336
 };
+function getSummonerNameByPath(path) {
+    const split = path.split('/');
+    return split[split.length - 1];
+}
 async function getSummoner(summonerName) {
     const response = await fetch('/summoner', {
         method: 'POST',
@@ -45,40 +49,6 @@ async function getSummoner(summonerName) {
     const iconData = await iconResponse.json();
     summonerIcon.src = iconData.url;
     updateDisplay();
-}
-async function updateRankedStats(summonerId) {
-    const response = await fetch('/summonerRankedStats', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        },
-        body: JSON.stringify({ summonerId: summonerId })
-    });
-    const rankedStats = await response.json();
-    const rankedSoloStats = rankedStats[0];
-    const rankedFlexStats = rankedStats[1];
-    const dico = {
-        'BRONZE': 'Bronze',
-        'SILVER': 'Argent',
-        'GOLD': 'Or',
-        'PLATINUM': 'Platine',
-        'DIAMOND': 'Diamant',
-        'MASTER': 'Maître',
-        'GRANDMASTER': 'Grand Maître',
-        'CHALLENGER': 'Challenger'
-    };
-    const soloTier = rankedSoloStats['tier'];
-    console.log('SoloTier', soloTier);
-    const soloRank = rankedSoloStats['rank'];
-    const soloLP = rankedSoloStats['leaguePoints'];
-    summonerSoloRank.textContent = `${dico[soloTier]} ${soloRank} - ${soloLP} LP`;
-    summonerSoloImg.src = `./img/ranks-icons/${soloTier.toLowerCase()}.webp`;
-    const flexTier = rankedFlexStats['tier'];
-    const flexRank = rankedFlexStats['rank'];
-    const flexLP = rankedFlexStats['leaguePoints'];
-    summonerFlexRank.textContent = `${dico[flexTier]} ${flexRank} - ${flexLP} LP`;
-    summonerFlexImg.src = `./img/ranks-icons/${flexTier.toLowerCase()}.webp`;
 }
 function count(x, array) {
     let i = 0;
@@ -211,7 +181,6 @@ async function createMatchHistoryCard(match, puuid) {
         if (itemId !== 0)
             itemIdArray.push(itemId);
     }
-    console.log(itemIdArray);
     const itemResponse = await fetch('/item', {
         method: 'POST',
         headers: {
@@ -229,16 +198,16 @@ async function createMatchHistoryCard(match, puuid) {
             matchItem.src = itemUrl;
         }
         else {
-            matchItem.src = './img/items/default-item.svg';
+            matchItem.src = '/img/items/default-item.svg';
         }
         itemsContainer.append(matchItem);
     }
     const matchSummoners = document.createElement('div');
     matchSummoners.className = 'match-history-summoners';
     const summoner1 = document.createElement('img');
-    summoner1.src = './img/summoners/flash.webp';
+    summoner1.src = '/img/summoners/flash.webp';
     const summoner2 = document.createElement('img');
-    summoner2.src = './img/summoners/heal.webp';
+    summoner2.src = '/img/summoners/heal.webp';
     matchSummoners.append(summoner1);
     matchSummoners.append(summoner2);
     mainRightCol.append(itemsContainer);
@@ -250,7 +219,7 @@ async function createMatchHistoryCard(match, puuid) {
     footer.className = 'match-history-card-footer';
     const footerImgArray = [
         {
-            img: './img/war-swords.svg',
+            img: '/img/war-swords.svg',
             class: 'match-player-kda',
             text: `${match.info.participants[j].kills}/${match.info.participants[j].deaths}/${match.info.participants[j].assists}`
         },
@@ -260,12 +229,12 @@ async function createMatchHistoryCard(match, puuid) {
             text: `${match.info.participants[j].totalMinionsKilled} CS`
         },
         {
-            img: './img/coin.svg',
+            img: '/img/coin.svg',
             class: 'match-player-gold-earn',
             text: `${match.info.participants[j].goldEarned}`
         },
         {
-            img: './img/arrow-right.svg'
+            img: '/img/arrow-right.svg'
         }
     ];
     for (let card of footerImgArray) {
@@ -320,7 +289,6 @@ async function updateMatchHistory(puuid) {
     let n = recentChampsRate.length < 3 ? recentChampsRate.length : 3;
     for (let i = 0; i < n; i++) {
         let champ = recentChampsRate[i];
-        console.log(champ);
         createRecentChampCard(champ.championName, champ.championRate);
     }
     while (matchHistoryContainer.firstChild)
@@ -330,16 +298,16 @@ async function updateMatchHistory(puuid) {
     }
 }
 function updateDisplay() {
-    summonerName.textContent = summoner.name;
-    updateRankedStats(summoner.id);
+    console.log("J'affiche l'historique de ", summoner.name);
     updateMatchHistory(summoner.puuid);
 }
 summonerInput.addEventListener('keydown', event => {
     if (!summonerInput.value)
         return;
     if (event.key === 'Enter') {
-        getSummoner(summonerInput.value);
+        window.location.replace(`/summoners/${summonerInput.value}`);
+        window.location.reload;
     }
 });
-updateDisplay();
+getSummoner(getSummonerNameByPath(window.location.pathname));
 //# sourceMappingURL=app.js.map

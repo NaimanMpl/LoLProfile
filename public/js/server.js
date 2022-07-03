@@ -17,6 +17,12 @@ const riotApi = new riot_api_1.RiotAPI(RIOT_API_KEY);
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use(express_1.default.static('public'));
+app.use('/css', express_1.default.static(__dirname + 'public/css'));
+app.use('/img', express_1.default.static(__dirname + 'public/img'));
+app.use(express_1.default.urlencoded({ extended: true }));
+app.set('view engine', 'ejs');
+const summonerRouter = require('../routes/summoners');
+app.use('/summoners', summonerRouter);
 app.post('/queues', (request, response) => {
     response.json(queues_json_1.default);
 });
@@ -124,7 +130,6 @@ app.post('/item', async (request, response) => {
     try {
         const ddragon = new riot_api_1.DDragon();
         const version = await ddragon.versions.latest();
-        console.log('Here!', request.body);
         const itemIdsArray = request.body.itemIds;
         const itemPromises = [];
         itemIdsArray.forEach(id => {

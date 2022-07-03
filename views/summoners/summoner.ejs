@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=p, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header>
+        <h1>Historique des parties</h1>
+    </header>
+    <section id="search">
+        <div class="search-player-container">
+            <input type="text" placeholder="Rechercher un joueur" name="" id="search-player-input">
+        </div>
+    </section>
+    <section id="player-info">
+        <div class="player-info-container">
+            <div class="player-profile">
+                <img id="player-summoner-icon" src="<%= locals.profileIconUrl %>" alt="">
+                <h4 id="player-username"><%= locals.summoner.name %> </h4>
+            </div>
+            <div class="player-ranked-stats">
+                <div class="player-ranked-card">
+                    <div class="player-ranked-card-title">
+                        <h6>Flexible</h6>
+                        <h3 id="player-flex-rank"> <%= locals.flexRankedStats.tier %> <%= locals.flexRankedStats.rank %> - <%= locals.soloRankedStats.leaguePoints %> LP</h3>
+                    </div>
+                    <img id="player-flex-rank-icon" src="<%= locals.flexRankedStats.imgUrl %>" alt="" id="player-flex-rank-logo">
+                </div>  
+                <hr>
+                <div class="player-ranked-card">
+                    <div class="player-ranked-card-title">
+                        <h6>Solo/Duo</h6>
+                        <h3 id="player-soloduo-rank"><%= locals.soloRankedStats.tier %> <%= locals.soloRankedStats.rank %> - <%= locals.soloRankedStats.leaguePoints %> PL</h3>
+                    </div>
+                    <img id="player-soloduo-rank-icon" src="<%= locals.soloRankedStats.imgUrl %>" alt="" id="player-flex-rank-logo">
+                </div>
+                <hr>
+                <h6>Parties Récentes</h6>
+                <div class="recent-champ-container">
+
+                </div>
+            </div>
+            <div class="player-match-history">
+                <h3>20 dernières parties</h3>
+                <div class="match-history-card-container">
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="/js/app.js"></script>
+</body>
+</html>

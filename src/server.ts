@@ -17,6 +17,15 @@ const app:Application = express();
 
 app.use(express.json());
 app.use(express.static('public'));
+app.use('/css', express.static(__dirname + 'public/css'));
+app.use('/img', express.static(__dirname + 'public/img'));
+app.use(express.urlencoded({extended: true}));
+app.set('view engine', 'ejs');
+
+
+const summonerRouter = require('../routes/summoners');
+
+app.use('/summoners', summonerRouter);
 
 // Old Methods
 
@@ -137,7 +146,6 @@ app.post('/item', async (request: Request, response: Response) => {
     try {
         const ddragon = new DDragon();
         const version = await ddragon.versions.latest();
-        console.log('Here!', request.body);
         const itemIdsArray: number[] = request.body.itemIds;
         const itemPromises: Promise<AxiosResponse<any, any>>[] = [];
 
